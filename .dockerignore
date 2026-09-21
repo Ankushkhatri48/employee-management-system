@@ -4,3 +4,4 @@ target/
 .git
 .gitignore
 *.md
+employee-frontend/

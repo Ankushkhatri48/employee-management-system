@@ -4,4 +4,5 @@ target/
 .git
 .gitignore
 *.md
-employee-frontend/
+employee-frontend/node_modules/
+employee-frontend/dist/

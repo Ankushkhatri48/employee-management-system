@@ -1,6 +1,9 @@
 // Base URL for the Spring Boot REST API
-// Connects directly to the live Render cloud deployment (or your local backend if running)
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://employee-management-system-d96h.onrender.com';
+// In production, when served by Spring Boot, empty string '' uses the current origin
+// In local Vite development, falls back to the deployed Render backend
+export const API_BASE_URL = import.meta.env.VITE_API_URL !== undefined 
+    ? import.meta.env.VITE_API_URL 
+    : (import.meta.env.DEV ? 'https://employee-management-system-d96h.onrender.com' : '');
 
 const EMPLOYEES_URL = `${API_BASE_URL}/api/employees`;
 

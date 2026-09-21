@@ -3,235 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Management System</title>
-    <!-- Google Fonts -->
+    <title>Employee Management API - Interactive Playground</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <!-- Notification Toast -->
-    <div id="toast" class="toast hidden"></div>
-
-    <div class="app-container">
-        <!-- Sidebar / Brand -->
-        <header class="app-header">
+    <div class="app-shell">
+        <!-- Top Navigation Bar -->
+        <header class="navbar">
             <div class="brand">
-                <div class="brand-logo">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="9" cy="7" r="4"></circle>
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                    </svg>
-                </div>
+                <div class="logo-box">API</div>
                 <div>
-                    <h1>StaffSphere</h1>
-                    <p class="subtitle">Cloud Employee Management System</p>
+                    <h2>Employee API Playground</h2>
+                    <p class="nav-sub">Interactive visual tester for all Spring Boot endpoints</p>
                 </div>
             </div>
-            <div class="header-actions">
-                <span class="status-badge" id="api-status">
-                    <span class="status-dot"></span> API Connected
-                </span>
-                <button class="btn btn-primary" id="open-add-modal-btn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                    Add Employee
+            
+            <div class="nav-controls">
+                <button class="nav-btn prev-btn" id="prev-endpoint-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    Previous
+                </button>
+                <span class="step-indicator" id="step-counter">Endpoint 1 of 7</span>
+                <button class="nav-btn next-btn" id="next-endpoint-btn">
+                    Next
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </button>
             </div>
         </header>
 
-        <!-- KPI Metrics Grid -->
-        <section class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon icon-blue">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
+        <!-- Horizontal Tabs / Endpoint Selector -->
+        <nav class="endpoint-tabs" id="endpoint-tab-bar">
+            <!-- Rendered by JS -->
+        </nav>
+
+        <!-- Active Endpoint Stage -->
+        <main class="playground-card">
+            <div class="card-top-bar">
+                <div class="endpoint-badge-container">
+                    <span class="http-badge" id="ep-method">GET</span>
+                    <span class="endpoint-path" id="ep-path">/api/employees</span>
                 </div>
-                <div>
-                    <span class="stat-label">Total Employees</span>
-                    <h3 class="stat-value" id="stat-total">0</h3>
+                <div class="endpoint-title-desc">
+                    <h3 id="ep-title">Get All Employees</h3>
+                    <p id="ep-desc">Retrieves the complete list of registered employees from the MySQL database.</p>
                 </div>
             </div>
 
-            <div class="stat-card">
-                <div class="stat-icon icon-green">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-                    </svg>
+            <div class="playground-grid">
+                <!-- Request Panel -->
+                <div class="panel request-panel">
+                    <div class="panel-header">
+                        <h4>Request Parameters & Payload</h4>
+                    </div>
+                    
+                    <form id="endpoint-form" class="panel-body">
+                        <!-- Dynamic inputs injected by JS depending on endpoint -->
+                        <div id="dynamic-inputs" class="inputs-container"></div>
+                        
+                        <div class="action-footer">
+                            <button type="submit" class="btn btn-execute" id="execute-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                Send Request
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <div>
-                    <span class="stat-label">Departments</span>
-                    <h3 class="stat-value" id="stat-depts">0</h3>
+
+                <!-- Response Panel -->
+                <div class="panel response-panel">
+                    <div class="panel-header response-header">
+                        <h4>Live Server Response</h4>
+                        <div class="meta-indicators">
+                            <span class="status-chip chip-neutral" id="resp-status">Status: Idle</span>
+                            <span class="status-chip chip-neutral" id="resp-time">Time: -</span>
+                        </div>
+                    </div>
+                    
+                    <div class="panel-body json-wrapper">
+                        <pre id="response-output" class="json-code">// Click "Send Request" to execute this endpoint...</pre>
+                    </div>
                 </div>
             </div>
 
-            <div class="stat-card">
-                <div class="stat-icon icon-purple">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="12" y1="1" x2="12" y2="23"></line>
-                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                    </svg>
-                </div>
-                <div>
-                    <span class="stat-label">Total Payroll</span>
-                    <h3 class="stat-value" id="stat-payroll">$0</h3>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon icon-amber">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                    </svg>
-                </div>
-                <div>
-                    <span class="stat-label">Avg Salary</span>
-                    <h3 class="stat-value" id="stat-avg-salary">$0</h3>
-                </div>
-            </div>
-        </section>
-
-        <!-- Main Content Area -->
-        <main class="main-card">
-            <!-- Controls & Filters (GET /api/employees & GET /api/employees/department/{name}) -->
-            <div class="table-toolbar">
-                <div class="search-box">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                    <input type="text" id="search-input" placeholder="Search by name or email...">
-                </div>
-
-                <div class="filter-group">
-                    <label for="department-filter" class="filter-label">Filter Department:</label>
-                    <select id="department-filter" class="select-input">
-                        <option value="ALL">All Departments</option>
-                    </select>
-
-                    <button class="btn btn-secondary" id="refresh-btn" title="Reload from API">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="23 4 23 10 17 10"></polyline>
-                            <polyline points="1 20 1 14 7 14"></polyline>
-                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-                        </svg>
-                        Refresh
-                    </button>
-                </div>
-            </div>
-
-            <!-- Employees Table -->
-            <div class="table-responsive">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Employee</th>
-                            <th>Email</th>
-                            <th>Department</th>
-                            <th>Annual Salary</th>
-                            <th class="text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="employee-tbody">
-                        <tr>
-                            <td colspan="6" class="loading-cell">
-                                <div class="spinner"></div>
-                                <p>Loading employees from database...</p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="table-footer">
-                <span id="showing-count">Showing 0 employees</span>
+            <!-- Bottom Quick Switch Bar -->
+            <div class="card-bottom-nav">
+                <button class="nav-btn-secondary" id="bottom-prev-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    <span id="bottom-prev-label">Previous</span>
+                </button>
+                <button class="nav-btn-secondary next-accent" id="bottom-next-btn">
+                    <span id="bottom-next-label">Next</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
             </div>
         </main>
-    </div>
-
-    <!-- Modal: Add / Edit Employee (POST /api/employees & PUT /api/employees/{id}) -->
-    <div id="employee-modal" class="modal-backdrop hidden">
-        <div class="modal-card">
-            <div class="modal-header">
-                <h3 id="modal-title">Add New Employee</h3>
-                <button class="btn-close" id="close-modal-btn">&times;</button>
-            </div>
-            <form id="employee-form">
-                <input type="hidden" id="emp-id">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="first-name">First Name *</label>
-                        <input type="text" id="first-name" required placeholder="e.g. Ankush">
-                    </div>
-                    <div class="form-group">
-                        <label for="last-name">Last Name *</label>
-                        <input type="text" id="last-name" required placeholder="e.g. Khatri">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email Address *</label>
-                    <input type="email" id="email" required placeholder="ankush@example.com">
-                </div>
-
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="department">Department *</label>
-                        <input type="text" id="department" required placeholder="e.g. Engineering, Sales, HR">
-                    </div>
-                    <div class="form-group">
-                        <label for="salary">Annual Salary ($) *</label>
-                        <input type="number" id="salary" step="100" min="0" required placeholder="e.g. 75000">
-                    </div>
-                </div>
-
-                <div class="modal-actions">
-                    <button type="button" class="btn btn-secondary" id="cancel-modal-btn">Cancel</button>
-                    <button type="submit" class="btn btn-primary" id="save-emp-btn">Save Employee</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal: View Salary Breakdown (GET /api/employees/{id}/salary) -->
-    <div id="salary-modal" class="modal-backdrop hidden">
-        <div class="modal-card modal-sm">
-            <div class="modal-header">
-                <h3>Salary & Compensation Breakdown</h3>
-                <button class="btn-close" id="close-salary-btn">&times;</button>
-            </div>
-            <div class="salary-details" id="salary-details-content">
-                <div class="spinner"></div>
-            </div>
-            <div class="modal-actions">
-                <button type="button" class="btn btn-secondary" id="dismiss-salary-btn">Close</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal: View Single Employee by ID (GET /api/employees/{id}) -->
-    <div id="view-modal" class="modal-backdrop hidden">
-        <div class="modal-card modal-sm">
-            <div class="modal-header">
-                <h3>Employee Details</h3>
-                <button class="btn-close" id="close-view-btn">&times;</button>
-            </div>
-            <div class="view-details" id="view-details-content">
-                <div class="spinner"></div>
-            </div>
-            <div class="modal-actions">
-                <button type="button" class="btn btn-secondary" id="dismiss-view-btn">Close</button>
-            </div>
-        </div>
     </div>
 
     <script src="js/app.js"></script>

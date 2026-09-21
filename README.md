@@ -7,7 +7,7 @@ A production-ready Java Spring Boot REST API for managing employees, designed fr
 ## 🌐 Live Demo & Repository
 
 - **Live Public API:** `YOUR_DEPLOYED_URL` *(e.g., https://employee-management-api.onrender.com)*
-- **GitHub Repository:** `YOUR_GITHUB_REPOSITORY_URL` *(e.g., https://github.com/your-username/employee-management-system)*
+- **GitHub Repository:** https://github.com/Ankushkhatri48/employee-management-system
 
 ---
 

@@ -1,0 +1,5 @@
+# Clean and package into an executable JAR:
+./mvnw clean package -DskipTests
+
+# Run the packaged application:
+java -jar target/employee-management-system-1.0.0.jar
